@@ -4,9 +4,22 @@ const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data');
 const db = require('../db/connection');
 
-seed(data).then(() => db.end());
+beforeEach(() => seed(data));
+afterAll(() => db.end());
 
 describe('app', () => {
+    describe('Endpoint error', () => {
+        test('status:404 - responds with "Path not found"', () => {
+            return request(app)
+                .get('/api/not-a-path')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Path not found"
+                    });
+                })
+        });
+    });
     describe('GET /api/topics', () => {
         test('status:200 - responds with an array of topic objects', () => {
             return request(app)
@@ -23,16 +36,6 @@ describe('app', () => {
                             })
                         )
                     })
-                })
-        });
-        test('status:404 - responds with "Path not found"', () => {
-            return request(app)
-                .get('/api/not-a-path')
-                .expect(404)
-                .then(({ body }) => {
-                    expect(body).toEqual({
-                        message: "Path not found"
-                    });
                 })
         });
     });
