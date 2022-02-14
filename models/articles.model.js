@@ -14,3 +14,15 @@ exports.selectArticleById = async (articleId) => {
 
     return article.rows[0];
 }
+
+exports.updateArticleById = async (articleId, reqBody) => {
+    const { inc_votes } = reqBody;
+    const article = await db.query(`
+        UPDATE articles
+        SET votes = votes + $1
+        WHERE article_id = $2
+        RETURNING *
+    `, [inc_votes, articleId]);
+
+    return article.rows[0];
+}
