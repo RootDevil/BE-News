@@ -81,7 +81,7 @@ describe('app', () => {
         test('status:200 - responds with article object with incremented votes when given positive value', () => {
             return request(app)
                 .patch('/api/articles/3')
-                .send({ 'inc_votes': 1 })
+                .send({ inc_votes: 1 })
                 .expect(200)
                 .then(({ body: { article } }) => {
                     expect(article).toEqual({
@@ -98,7 +98,7 @@ describe('app', () => {
         test('status:200 - responds with article object with decremented votes when given negative value', () => {
             return request(app)
                 .patch('/api/articles/3')
-                .send({ 'inc_votes': -5 })
+                .send({ inc_votes: -5 })
                 .expect(200)
                 .then(({ body: { article } }) => {
                     expect(article).toEqual({
@@ -110,6 +110,28 @@ describe('app', () => {
                         created_at: expect.any(String),
                         votes: -5
                     })
+                })
+        });
+        test('status:400 - responds with "Bad request" when given wrong value type', () => {
+            return request(app)
+                .patch('/api/articles/3')
+                .send({ inc_votes: 'hello world' })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
+        test('status:400 - responds with "Bad request" when given invalid property', () => {
+            return request(app)
+                .patch('/api/articles/3')
+                .send({ not_a_property: 5 })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
                 })
         });
     });

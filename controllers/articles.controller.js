@@ -11,6 +11,11 @@ exports.getArticleById = async (req, res, next) => {
 }
 
 exports.patchArticleById = async (req, res, next) => {
-    const article = await updateArticleById(req.params.article_id, req.body)
-    res.status(200).send({ article });
+    try {
+        const article = await updateArticleById(req.params.article_id, req.body)
+        res.status(200).send({ article });
+    }
+    catch(err) {
+        next(err);
+    }
 }
