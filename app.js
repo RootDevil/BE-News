@@ -1,7 +1,7 @@
 const express = require('express');
 const { getArticleById } = require('./controllers/articles.controller');
 const { getTopics } = require('./controllers/topics.controller');
-const { handleCustomErrors, handlePSQLErrors } = require('./errors');
+const { handleCustomErrors, handlePSQLErrors, handleServerErrors } = require('./errors');
 
 const app = express();
 
@@ -14,5 +14,6 @@ app.all('/*', (req, res) => {
 
 app.use(handleCustomErrors);
 app.use(handlePSQLErrors);
+app.use(handleServerErrors);
 
 module.exports = app;
