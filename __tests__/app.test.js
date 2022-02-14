@@ -38,5 +38,24 @@ describe('app', () => {
                     })
                 })
         });
-    });
+    })
+    describe('GET /api/articles/:article_id', () => {
+        test('status:200 - responds with article object', () => {
+            return request(app)
+                .get('/api/articles/3')
+                .expect(200)
+                .then(({ body: { article } }) => {
+                    expect(article).toEqual({
+                        article_id: 3,
+                        title: "Eight pug gifs that remind me of mitch",
+                        topic: "mitch",
+                        author: "icellusedkars",
+                        body: "some gifs",
+                        created_at: expect.any(String),
+                        votes: 0
+                    })
+                })
+        });
+        
+    });;
 });
