@@ -10,7 +10,7 @@ exports.selectArticleById = async (articleId) => {
           status: 404,
           message: "Resource does not exist"
         })
-      }
+    }
 
     return article.rows[0];
 }
