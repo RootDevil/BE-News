@@ -76,5 +76,63 @@ describe('app', () => {
                     });
                 })
         });
-    });;
+    });
+    describe('PATCH /api/articles/:article_id', () => {
+        test('status:200 - responds with article object with incremented votes when given positive value', () => {
+            return request(app)
+                .patch('/api/articles/3')
+                .send({ inc_votes: 1 })
+                .expect(200)
+                .then(({ body: { article } }) => {
+                    expect(article).toEqual({
+                        article_id: 3,
+                        title: "Eight pug gifs that remind me of mitch",
+                        topic: "mitch",
+                        author: "icellusedkars",
+                        body: "some gifs",
+                        created_at: expect.any(String),
+                        votes: 1
+                    })
+                })
+        });
+        test('status:200 - responds with article object with decremented votes when given negative value', () => {
+            return request(app)
+                .patch('/api/articles/3')
+                .send({ inc_votes: -5 })
+                .expect(200)
+                .then(({ body: { article } }) => {
+                    expect(article).toEqual({
+                        article_id: 3,
+                        title: "Eight pug gifs that remind me of mitch",
+                        topic: "mitch",
+                        author: "icellusedkars",
+                        body: "some gifs",
+                        created_at: expect.any(String),
+                        votes: -5
+                    })
+                })
+        });
+        test('status:400 - responds with "Bad request" when given wrong value type', () => {
+            return request(app)
+                .patch('/api/articles/3')
+                .send({ inc_votes: 'hello world' })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
+        test('status:400 - responds with "Bad request" when given invalid property', () => {
+            return request(app)
+                .patch('/api/articles/3')
+                .send({ not_a_property: 5 })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
+    });
 });
