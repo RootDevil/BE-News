@@ -5,5 +5,12 @@ exports.selectArticleById = async (articleId) => {
         SELECT * FROM articles WHERE article_id = $1
     `, [articleId]);
 
+    if (article.rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          message: "Resource does not exist"
+        })
+      }
+
     return article.rows[0];
 }

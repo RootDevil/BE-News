@@ -56,6 +56,15 @@ describe('app', () => {
                     })
                 })
         });
-        
+        test('status:404 - responds with "Resource does not exist"', () => {
+            return request(app)
+                .get('/api/articles/9999999')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    });
+                })
+        });
     });;
 });
