@@ -177,5 +177,16 @@ describe('app', () => {
                     })
                 })
         });
+        test('status:200 - responds with array sorted by date in descending order', () => {
+            return request(app)
+                .get('/api/articles')
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                    expect(articles).toBeSorted({
+                        key: 'created_at', 
+                        descending: 'true'
+                    });
+                })
+        });
     });
 });

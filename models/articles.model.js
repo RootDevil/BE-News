@@ -29,7 +29,8 @@ exports.updateArticleById = async (articleId, reqBody) => {
 
 exports.selectArticles = async () => {
     const articles = await db.query(`
-        SELECT * FROM articles;
+        SELECT * FROM articles
+        ORDER BY created_at DESC;
     `)
 
     return articles.rows;
