@@ -2,7 +2,7 @@ const db = require('../db/connection');
 
 exports.selectArticleById = async (articleId) => {
     const article = await db.query(`
-        SELECT * FROM articles WHERE article_id = $1
+        SELECT * FROM articles WHERE article_id = $1;
     `, [articleId]);
 
     if (article.rows.length === 0) {
@@ -21,7 +21,7 @@ exports.updateArticleById = async (articleId, reqBody) => {
         UPDATE articles
         SET votes = votes + $1
         WHERE article_id = $2
-        RETURNING *
+        RETURNING *;
     `, [inc_votes, articleId]);
 
     return article.rows[0];
