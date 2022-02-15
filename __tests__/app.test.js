@@ -236,5 +236,13 @@ describe('app', () => {
                     });
                 });
         });
+        test('status:200 - responds with empty array for article_id with no associated comments', () => {
+            return request(app)
+                .get('/api/articles/2/comments')
+                .expect(200)
+                .then(({ body: { comments } }) => {
+                    expect(comments).toEqual([]);
+                });
+        });
     });
 });
