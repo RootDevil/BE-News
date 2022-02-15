@@ -2,7 +2,10 @@ const db = require('../db/connection');
 
 exports.selectArticleById = async (articleId) => {
     const article = await db.query(`
-        SELECT * FROM articles WHERE article_id = $1;
+    SELECT articles.article_id, title, topic, articles.author, articles.body, articles.created_at, articles.votes, CAST(COUNT(comments.article_id) AS INT) AS comment_count 
+    FROM articles 
+    LEFT JOIN comments ON articles.article_id = comments.article_id  WHERE articles.article_id = $1 
+    GROUP BY articles.article_id;
     `, [articleId]);
 
     if (article.rows.length === 0) {
