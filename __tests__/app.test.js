@@ -3,6 +3,7 @@ const request = require('supertest');
 const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data');
 const db = require('../db/connection');
+const { convertTimestampToDate } = require('../db/helpers/utils');
 
 beforeEach(() => seed(data));
 afterAll(() => db.end());
@@ -151,6 +152,29 @@ describe('app', () => {
                         );
                         expect(Object.keys(user).length).toBe(1);
                     })   
+                })
+        });
+    });
+    describe('GET /api/articles', () => {
+        test('status:200 - responds with an array of article objects', () => {
+            return request(app)
+                .get('/api/articles')
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                    expect(articles).toBeInstanceOf(Array);
+                    expect(articles).toHaveLength(12);
+                    articles.forEach(article => {
+                        expect(article).toEqual(
+                            expect.objectContaining({
+                                article_id: expect.any(Number),
+                                title: expect.any(String),
+                                author: expect.any(String),
+                                topic: expect.any(String),
+                                created_at: expect.any(String),
+                                votes: expect.any(Number)
+                            })
+                        )
+                    })
                 })
         });
     });

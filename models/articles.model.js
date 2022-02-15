@@ -26,3 +26,11 @@ exports.updateArticleById = async (articleId, reqBody) => {
 
     return article.rows[0];
 }
+
+exports.selectArticles = async () => {
+    const articles = await db.query(`
+        SELECT * FROM articles;
+    `)
+
+    return articles.rows;
+}

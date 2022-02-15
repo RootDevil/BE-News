@@ -1,4 +1,4 @@
-const { selectArticleById, updateArticleById } = require("../models/articles.model")
+const { selectArticleById, updateArticleById, selectArticles } = require("../models/articles.model")
 
 exports.getArticleById = async (req, res, next) => {
     try {
@@ -18,4 +18,9 @@ exports.patchArticleById = async (req, res, next) => {
     catch(err) {
         next(err);
     }
+}
+
+exports.getArticles = async (req, res) => {
+    const articles = await selectArticles();
+    res.status(200).send({ articles });
 }
