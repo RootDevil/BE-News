@@ -1,21 +1,8 @@
 const db = require('../db/connection');
-
-const checkArticleExists = async (articleId) => {
-    const articles = await db.query(
-        'SELECT * FROM articles WHERE article_id = $1;',
-        [articleId]
-      );
-    
-      if (articles.rows.length === 0) {
-        return Promise.reject({ 
-            status: 404, 
-            message: "Resource does not exist" 
-        });
-      }
-}
+const { checkResourceExists } = require('../utils/utils');
 
 exports.selectCommentsByArticleId = async (articleId) => {
-    await checkArticleExists(articleId);
+    await checkResourceExists('articles', 'article_id', articleId);
 
     const comments = await db.query(`
         SELECT * FROM comments
