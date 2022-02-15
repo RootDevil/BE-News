@@ -46,15 +46,41 @@ describe('app', () => {
                 .get('/api/articles/3')
                 .expect(200)
                 .then(({ body: { article } }) => {
-                    expect(article).toEqual({
-                        article_id: 3,
-                        title: "Eight pug gifs that remind me of mitch",
-                        topic: "mitch",
-                        author: "icellusedkars",
-                        body: "some gifs",
-                        created_at: expect.any(String),
-                        votes: 0
-                    })
+                    expect(article).toEqual(
+                        expect.objectContaining({
+                            article_id: 3,
+                            title: "Eight pug gifs that remind me of mitch",
+                            topic: "mitch",
+                            author: "icellusedkars",
+                            body: "some gifs",
+                            created_at: expect.any(String),
+                            votes: 0
+                        })
+                    )
+                })
+        });
+        test('status:200 - responds with object containing comment count', () => {
+            return request(app)
+                .get('/api/articles/1')
+                .expect(200)
+                .then(({ body: { article } }) => {
+                    expect(article).toEqual(
+                        expect.objectContaining({
+                            comment_count: 11
+                        })
+                    )
+                })
+        });
+        test('status:200 - responds with object containing comment count when article has no comments', () => {
+            return request(app)
+                .get('/api/articles/2')
+                .expect(200)
+                .then(({ body: { article } }) => {
+                    expect(article).toEqual(
+                        expect.objectContaining({
+                            comment_count: 0
+                        })
+                    )
                 })
         });
         test('status:404 - responds with "Resource does not exist"', () => {
