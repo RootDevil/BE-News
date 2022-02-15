@@ -71,6 +71,18 @@ describe('app', () => {
                     )
                 })
         });
+        test('status:200 - responds with object containing comment count when article has no comments', () => {
+            return request(app)
+                .get('/api/articles/2')
+                .expect(200)
+                .then(({ body: { article } }) => {
+                    expect(article).toEqual(
+                        expect.objectContaining({
+                            comment_count: 0
+                        })
+                    )
+                })
+        });
         test('status:404 - responds with "Resource does not exist"', () => {
             return request(app)
                 .get('/api/articles/9999999')
