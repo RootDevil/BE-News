@@ -254,5 +254,15 @@ describe('app', () => {
                     });
                 })
         });
+        test('status:400 - responds with "Bad request"', () => {
+            return request(app)
+                .get('/api/articles/not_an_id/comments')
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
     });
 });
