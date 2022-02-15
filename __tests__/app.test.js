@@ -244,5 +244,15 @@ describe('app', () => {
                     expect(comments).toEqual([]);
                 });
         });
+        test('status:404 - responds with "Resource does not exist"', () => {
+            return request(app)
+                .get('/api/articles/999999/comments')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    });
+                })
+        });
     });
 });
