@@ -285,5 +285,19 @@ describe('app', () => {
                     );
                 })
         });
+        test('status:404 - responds with "Resource does not exist"', () => {
+            return request(app)
+                .post('/api/articles/99999/comments')
+                .send({
+                    username: 'butter_bridge',
+                    body: '#JusticeForMitch'
+                })
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    });
+                })
+        });
     });
 });

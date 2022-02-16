@@ -10,8 +10,13 @@ exports.getCommentsByArticleId = async (req, res, next) => {
     }
 }
 
-exports.postCommentByArticleId = async (req, res) => {
-    const { params: { article_id } } = req;
-    const comment = await insertCommentByArticleId(article_id, req.body);
-    res.status(200).send({ comment });
+exports.postCommentByArticleId = async (req, res, next) => {
+    try {
+        const { params: { article_id } } = req;
+        const comment = await insertCommentByArticleId(article_id, req.body);
+        res.status(200).send({ comment });
+    }
+    catch(err) {
+        next(err);
+    }
 }
