@@ -215,4 +215,54 @@ describe('app', () => {
                 })
         });
     });
+    describe('GET /api/articles/:article_id/comments', () => {
+        test('status:200 - responds with array of comments for given article_id', () => {
+            return request(app)
+                .get('/api/articles/1/comments')
+                .expect(200)
+                .then(({ body: { comments } }) => {
+                    expect(comments).toBeInstanceOf(Array);
+                    expect(comments).toHaveLength(11);
+                    comments.forEach(comment => {
+                        expect(comment).toEqual(
+                            expect.objectContaining({
+                                comment_id: expect.any(Number),
+                                votes: expect.any(Number),
+                                created_at: expect.any(String),
+                                author: expect.any(String),
+                                body: expect.any(String)
+                            })
+                        );
+                    });
+                });
+        });
+        test('status:200 - responds with empty array for article_id with no associated comments', () => {
+            return request(app)
+                .get('/api/articles/2/comments')
+                .expect(200)
+                .then(({ body: { comments } }) => {
+                    expect(comments).toEqual([]);
+                });
+        });
+        test('status:404 - responds with "Resource does not exist"', () => {
+            return request(app)
+                .get('/api/articles/999999/comments')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    });
+                })
+        });
+        test('status:400 - responds with "Bad request"', () => {
+            return request(app)
+                .get('/api/articles/not_an_id/comments')
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
+    });
 });

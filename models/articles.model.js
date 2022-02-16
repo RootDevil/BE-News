@@ -1,19 +1,15 @@
 const db = require('../db/connection');
+const { checkResourceExists } = require('../utils/utils');
 
 exports.selectArticleById = async (articleId) => {
+    await checkResourceExists('articles', 'article_id', articleId);
+    
     const article = await db.query(`
     SELECT articles.article_id, title, topic, articles.author, articles.body, articles.created_at, articles.votes, CAST(COUNT(comments.article_id) AS INT) AS comment_count 
     FROM articles 
     LEFT JOIN comments ON articles.article_id = comments.article_id  WHERE articles.article_id = $1 
     GROUP BY articles.article_id;
     `, [articleId]);
-
-    if (article.rows.length === 0) {
-        return Promise.reject({
-          status: 404,
-          message: "Resource does not exist"
-        })
-    }
 
     return article.rows[0];
 }
