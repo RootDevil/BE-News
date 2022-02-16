@@ -214,6 +214,20 @@ describe('app', () => {
                     });
                 })
         });
+        test('status:200 - responds with array with "comment_count" property', () => {
+            return request(app)
+                .get('/api/articles')
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                    articles.forEach(article => {
+                        expect(article).toEqual(
+                            expect.objectContaining({
+                                comment_count: expect.any(Number)
+                            })
+                        )
+                    })
+                })
+        });
     });
     describe('GET /api/articles/:article_id/comments', () => {
         test('status:200 - responds with array of comments for given article_id', () => {
