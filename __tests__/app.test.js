@@ -265,4 +265,25 @@ describe('app', () => {
                 })
         });
     });
+    describe('POST /api/articles/:article_id/comments', () => {
+        test('status:200 - responds with posted comment object', () => {
+            return request(app)
+                .post('/api/articles/4/comments')
+                .send({
+                    username: 'butter_bridge',
+                    body: '#JusticeForMitch'
+                })
+                .expect(200)
+                .then(({ body: { comment } }) => {
+                    expect(comment).toEqual(
+                        expect.objectContaining({
+                            comment_id: expect.any(Number),
+                            author: 'butter_bridge',
+                            body: '#JusticeForMitch',
+                            article_id: 4
+                        })
+                    );
+                })
+        });
+    });
 });

@@ -1,4 +1,4 @@
-const { selectCommentsByArticleId } = require("../models/comments.model")
+const { selectCommentsByArticleId, insertCommentByArticleId } = require("../models/comments.model")
 
 exports.getCommentsByArticleId = async (req, res, next) => {
     try {
@@ -8,4 +8,10 @@ exports.getCommentsByArticleId = async (req, res, next) => {
     catch(err) {
         next(err);
     }
+}
+
+exports.postCommentByArticleId = async (req, res) => {
+    const { params: { article_id } } = req;
+    const comment = await insertCommentByArticleId(article_id, req.body);
+    res.status(200).send({ comment });
 }
