@@ -228,6 +228,15 @@ describe('app', () => {
                     })
                 })
         });
+        test('status:200 - responds with array of articles for given query criteria', () => {
+            return request(app)
+                .get('/api/articles?sort_by=title&order=asc&topic=mitch')
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                    expect(articles).toBeSortedBy('title');
+                    expect(articles).toHaveLength(11);
+                })
+        });
     });
     describe('GET /api/articles/:article_id/comments', () => {
         test('status:200 - responds with array of comments for given article_id', () => {

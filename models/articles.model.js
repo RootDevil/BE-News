@@ -26,14 +26,31 @@ exports.updateArticleById = async (articleId, reqBody) => {
     return article.rows[0];
 }
 
-exports.selectArticles = async () => {
-    const articles = await db.query(`
+exports.selectArticles = async (query) => {
+    const { sort_by, order, topic } = query;
+    let queryValues = [];
+
+    let queryStr = `
         SELECT articles.article_id, title, topic, articles.author, articles.created_at, articles.votes, CAST(COUNT(comments.article_id) AS INT) AS comment_count 
         FROM articles 
         LEFT JOIN comments ON articles.article_id = comments.article_id
+    `
+    if (topic) {
+        queryValues.push(topic);
+        queryStr += `WHERE topic = $1`;
+    } 
+    queryStr += `
         GROUP BY articles.article_id
+    `
+    if (['article_id', 'title', 'author', 'topic', 'created_at', 'votes'].includes(sort_by) && ['asc', 'desc'].includes(order)) {
+        queryStr += `
+            ORDER BY ${sort_by} ${order};
+        `
+    }
+    else queryStr += `
         ORDER BY created_at DESC;
-    `)
+    `
+    const articles = await db.query(queryStr, queryValues);
 
     return articles.rows;
 }
