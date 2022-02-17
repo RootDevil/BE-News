@@ -372,5 +372,25 @@ describe('app', () => {
                     });
                 })
         });
+        test('status:404 - responds with "Resource does not exist"', () => {
+            return request(app)
+                .delete('/api/comments/999999')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    });
+                })
+        });
+        test('status:400 - responds with "Bad request"', () => {
+            return request(app)
+                .delete('/api/comments/not_an_id')
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
     });
 });

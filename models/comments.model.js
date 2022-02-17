@@ -26,6 +26,7 @@ exports.insertCommentByArticleId = async (articleId, newComment) => {
 }
 
 exports.removeCommentById = async (commentId) => {
+    await checkResourceExists('comments', 'comment_id', commentId);
     const comment = await db.query(`
         DELETE FROM comments
         WHERE comment_id = $1
