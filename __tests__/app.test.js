@@ -291,7 +291,7 @@ describe('app', () => {
                 .then(({ body: { comment } }) => {
                     expect(comment).toEqual(
                         expect.objectContaining({
-                            comment_id: expect.any(Number),
+                            comment_id: 19,
                             author: 'butter_bridge',
                             body: '#JusticeForMitch',
                             article_id: 4
