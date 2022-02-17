@@ -228,6 +228,68 @@ describe('app', () => {
                     })
                 })
         });
+        test('status:200 - responds with array of articles for given query criteria', () => {
+            const allQueries = request(app)
+                .get('/api/articles?sort_by=title&order=asc&topic=mitch')
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                    expect(articles).toBeSortedBy('title');
+                    expect(articles).toHaveLength(11);
+                })
+            const withoutSortBy = request(app)
+                .get('/api/articles?order=asc&topic=mitch')
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                    expect(articles).toBeSortedBy('created_at');
+                })
+            const withoutOrder = request(app)
+                .get('/api/articles?sort_by=comment_count&topic=mitch')
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                    expect(articles).toBeSorted({
+                        key: 'comment_count',
+                        descending: 'true'
+                    })
+                })
+            return Promise.all([allQueries, withoutSortBy, withoutOrder]);
+        });
+        test('status:200 - responds with empty array when given topic that doesn\'t exist', () => {
+            return request(app)
+                .get('/api/articles?topic=slurpy')
+                .expect(200)
+                .then(({ body: { articles }}) => {
+                    expect(articles).toEqual([]);
+                })
+        });
+        test('status:400 - responds with "Invalid query term"', () => {
+            return request(app)
+                .get('/api/articles?sort_by=title&name=slurpy')
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Invalid query term(s): name"
+                    });
+                })
+        });
+        test('status:400 - responds with "Invalid value"', () => {
+            const sortBy = request(app)
+                .get('/api/articles?sort_by=slurpy')
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Invalid sort_by value"
+                    });
+                })
+            const order = request(app)
+                .get('/api/articles?order=helloworld')
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Invalid order value"
+                    });
+                })
+            return Promise.all([sortBy, order]);
+        });
     });
     describe('GET /api/articles/:article_id/comments', () => {
         test('status:200 - responds with array of comments for given article_id', () => {

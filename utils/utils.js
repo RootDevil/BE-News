@@ -12,3 +12,18 @@ exports.checkResourceExists = async (table, column, value) => {
       });
     }
   }
+
+exports.checkValidQuery = async (query, validKeys) => {
+  const invalidKeys = [];
+  Object.keys(query).forEach(term => {
+    if (!validKeys.includes(term)){
+      invalidKeys.push(term);
+    }
+  })
+  if (invalidKeys.length !== 0) {
+    return Promise.reject({
+      status: 400,
+      message: `Invalid query term(s): ${invalidKeys}`
+    })
+  }
+}

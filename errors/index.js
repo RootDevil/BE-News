@@ -12,6 +12,12 @@ exports.handlePSQLErrors = (err, req, res, next) => {
     else if (err.code === "23503") {
         res.status(404).send({ message: "Resource does not exist" });
     }
+    else if (err.code === "42703") {
+        res.status(400).send({ message: "Invalid sort_by value"});
+    }
+    else if (err.code === "42601") {
+        res.status(400).send({ message: "Invalid order value"});
+    }
     else next(err);
 }
 
