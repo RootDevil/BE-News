@@ -229,13 +229,29 @@ describe('app', () => {
                 })
         });
         test('status:200 - responds with array of articles for given query criteria', () => {
-            return request(app)
+            const allQueries = request(app)
                 .get('/api/articles?sort_by=title&order=asc&topic=mitch')
                 .expect(200)
                 .then(({ body: { articles } }) => {
                     expect(articles).toBeSortedBy('title');
                     expect(articles).toHaveLength(11);
                 })
+            const withoutSortBy = request(app)
+                .get('/api/articles?order=asc&topic=mitch')
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                    expect(articles).toBeSortedBy('created_at');
+                })
+            const withoutOrder = request(app)
+                .get('/api/articles?sort_by=comment_count&topic=mitch')
+                .expect(200)
+                .then(({ body: { articles } }) => {
+                    expect(articles).toBeSorted({
+                        key: 'comment_count',
+                        descending: 'true'
+                    })
+                })
+            return Promise.all([allQueries, withoutSortBy, withoutOrder]);
         });
     });
     describe('GET /api/articles/:article_id/comments', () => {

@@ -41,15 +41,18 @@ exports.selectArticles = async (query) => {
     } 
     queryStr += `
         GROUP BY articles.article_id
+        ORDER BY
     `
-    if (['article_id', 'title', 'author', 'topic', 'created_at', 'votes'].includes(sort_by) && ['asc', 'desc'].includes(order)) {
+    if (['article_id', 'title', 'author', 'topic', 'created_at', 'votes', 'comment_count'].includes(sort_by)) {
         queryStr += `
-            ORDER BY ${sort_by} ${order};
+             ${sort_by}
         `
     }
-    else queryStr += `
-        ORDER BY created_at DESC;
-    `
+    else queryStr += ` created_at`;
+    if (['asc', 'desc'].includes(order)) {
+        queryStr += ` ${order};`
+    }
+    else queryStr += ` DESC`;
     const articles = await db.query(queryStr, queryValues);
 
     return articles.rows;
