@@ -356,4 +356,21 @@ describe('app', () => {
                 })
         });
     });
+    describe('DELETE /api/comments/:comment_id', () => {
+        test('status:201 - responds with deleted comment object', () => {
+            return request(app)
+                .delete('/api/comments/5')
+                .expect(201)
+                .then(({ body: { comment } }) => {
+                    expect(comment).toEqual({
+                        comment_id: 5,
+                        body: "I hate streaming noses",
+                        votes: 0,
+                        author: "icellusedkars",
+                        article_id: 1,
+                        created_at: expect.any(String)
+                    });
+                })
+        });
+    });
 });
