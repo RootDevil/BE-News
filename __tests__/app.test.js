@@ -285,7 +285,7 @@ describe('app', () => {
                     );
                 })
         });
-        test('status:404 - responds with "Resource does not exist"', () => {
+        test('status:404 - responds with "Resource does not exist" when given article_id which does not exist in articles table', () => {
             return request(app)
                 .post('/api/articles/99999/comments')
                 .send({
@@ -296,6 +296,34 @@ describe('app', () => {
                 .then(({ body }) => {
                     expect(body).toEqual({
                         message: "Resource does not exist"
+                    });
+                })
+        });
+        test('status:404 - responds with "Resource does not exist" when given username which does not exist in users table', () => {
+            return request(app)
+                .post('/api/articles/4/comments')
+                .send({
+                    username: 'slurpy',
+                    body: 'Off with his head'
+                })
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    });
+                })
+        });
+        test('status:400 - responds with "Bad request" when article_id param is wrong data type', () => {
+            return request(app)
+                .post('/api/articles/not_an_id/comments')
+                .send({
+                    username: 'butter_bridge',
+                    body: '#JusticeForMitch'
+                })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
                     });
                 })
         });
