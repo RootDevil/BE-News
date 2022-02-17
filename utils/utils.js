@@ -13,9 +13,8 @@ exports.checkResourceExists = async (table, column, value) => {
     }
   }
 
-exports.checkValidQuery = async (query) => {
+exports.checkValidQuery = async (query, validKeys) => {
   const invalidKeys = [];
-  const validKeys = ['sort_by', 'order', 'topic'];
   Object.keys(query).forEach(term => {
     if (!validKeys.includes(term)){
       invalidKeys.push(term);

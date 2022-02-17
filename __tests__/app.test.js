@@ -263,8 +263,24 @@ describe('app', () => {
                     });
                 })
         });
-        test('status:404', () => {
-            
+        test('status:400 - responds with "Invalid value"', () => {
+            const sortBy = request(app)
+                .get('/api/articles?sort_by=slurpy')
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Invalid sort_by value"
+                    });
+                })
+            const order = request(app)
+                .get('/api/articles?order=helloworld')
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Invalid order value"
+                    });
+                })
+            return Promise.all([sortBy, order]);
         });
     });
     describe('GET /api/articles/:article_id/comments', () => {

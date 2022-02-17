@@ -27,10 +27,28 @@ exports.updateArticleById = async (articleId, reqBody) => {
 }
 
 exports.selectArticles = async (query) => {
-    await checkValidQuery(query);
+    const validKeys = ['sort_by', 'order', 'topic'];
+    await checkValidQuery(query, validKeys);
 
     const { sort_by, order, topic } = query;
     let queryValues = [];
+
+    const validSortBy = ['article_id', 'title', 'author', 'topic', 'created_at', 'votes', 'comment_count'];
+    const validOrder = ['asc', 'desc'];
+
+    if (sort_by && !validSortBy.includes(sort_by)) {
+        return Promise.reject({
+            status: 400,
+            message: "Invalid sort_by value"
+        })
+    }
+
+    if (order && !validOrder.includes(order)) {
+        return Promise.reject({
+            status: 400,
+            message: "Invalid order value"
+        })
+    }
 
     let queryStr = `
         SELECT articles.article_id, title, topic, articles.author, articles.created_at, articles.votes, CAST(COUNT(comments.article_id) AS INT) AS comment_count 
@@ -45,15 +63,9 @@ exports.selectArticles = async (query) => {
         GROUP BY articles.article_id
         ORDER BY
     `
-    if (['article_id', 'title', 'author', 'topic', 'created_at', 'votes', 'comment_count'].includes(sort_by)) {
-        queryStr += `
-             ${sort_by}
-        `
-    }
+    if (sort_by) queryStr += `${sort_by}`;
     else queryStr += ` created_at`;
-    if (['asc', 'desc'].includes(order)) {
-        queryStr += ` ${order};`
-    }
+    if (order) queryStr += ` ${order};`;
     else queryStr += ` DESC`;
     const articles = await db.query(queryStr, queryValues);
 
