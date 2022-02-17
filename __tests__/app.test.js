@@ -253,6 +253,14 @@ describe('app', () => {
                 })
             return Promise.all([allQueries, withoutSortBy, withoutOrder]);
         });
+        test('status:200 - responds with empty array when given topic that doesn\'t exist', () => {
+            return request(app)
+                .get('/api/articles?topic=slurpy')
+                .expect(200)
+                .then(({ body: { articles }}) => {
+                    expect(articles).toEqual([]);
+                })
+        });
         test('status:400 - responds with "Invalid query term"', () => {
             return request(app)
                 .get('/api/articles?sort_by=title&name=slurpy')
