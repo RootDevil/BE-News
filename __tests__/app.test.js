@@ -299,5 +299,19 @@ describe('app', () => {
                     });
                 })
         });
+        test('status:400 - responds with "Bad request" when body is not formed properly', () => {
+            return request(app)
+                .post('/api/articles/4/comments')
+                .send({
+                    not_a_username: 'butter_bridge',
+                    not_a_body: '#JusticeForMitch'
+                })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
     });
 });
