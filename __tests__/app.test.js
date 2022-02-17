@@ -253,7 +253,7 @@ describe('app', () => {
                 })
             return Promise.all([allQueries, withoutSortBy, withoutOrder]);
         });
-        test('status:400 - responds with "[query] is not a valid query term"', () => {
+        test('status:400 - responds with "Invalid query term"', () => {
             return request(app)
                 .get('/api/articles?sort_by=title&name=slurpy')
                 .expect(400)
@@ -262,6 +262,9 @@ describe('app', () => {
                         message: "Invalid query term(s): name"
                     });
                 })
+        });
+        test('status:404', () => {
+            
         });
     });
     describe('GET /api/articles/:article_id/comments', () => {
