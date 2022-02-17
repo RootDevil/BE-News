@@ -1,5 +1,5 @@
 const db = require('../db/connection');
-const { checkResourceExists } = require('../utils/utils');
+const { checkResourceExists, checkValidQuery } = require('../utils/utils');
 
 exports.selectArticleById = async (articleId) => {
     await checkResourceExists('articles', 'article_id', articleId);
@@ -27,6 +27,8 @@ exports.updateArticleById = async (articleId, reqBody) => {
 }
 
 exports.selectArticles = async (query) => {
+    await checkValidQuery(query);
+
     const { sort_by, order, topic } = query;
     let queryValues = [];
 
