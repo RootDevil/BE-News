@@ -279,4 +279,81 @@ describe('app', () => {
                 })
         });
     });
+    describe('POST /api/articles/:article_id/comments', () => {
+        test('status:200 - responds with posted comment object', () => {
+            return request(app)
+                .post('/api/articles/4/comments')
+                .send({
+                    username: 'butter_bridge',
+                    body: '#JusticeForMitch'
+                })
+                .expect(200)
+                .then(({ body: { comment } }) => {
+                    expect(comment).toEqual(
+                        expect.objectContaining({
+                            comment_id: expect.any(Number),
+                            author: 'butter_bridge',
+                            body: '#JusticeForMitch',
+                            article_id: 4
+                        })
+                    );
+                })
+        });
+        test('status:404 - responds with "Resource does not exist" when given article_id which does not exist in articles table', () => {
+            return request(app)
+                .post('/api/articles/99999/comments')
+                .send({
+                    username: 'butter_bridge',
+                    body: '#JusticeForMitch'
+                })
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    });
+                })
+        });
+        test('status:404 - responds with "Resource does not exist" when given username which does not exist in users table', () => {
+            return request(app)
+                .post('/api/articles/4/comments')
+                .send({
+                    username: 'slurpy',
+                    body: 'Off with his head'
+                })
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    });
+                })
+        });
+        test('status:400 - responds with "Bad request" when article_id param is wrong data type', () => {
+            return request(app)
+                .post('/api/articles/not_an_id/comments')
+                .send({
+                    username: 'butter_bridge',
+                    body: '#JusticeForMitch'
+                })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
+        test('status:400 - responds with "Bad request" when body is not formed properly', () => {
+            return request(app)
+                .post('/api/articles/4/comments')
+                .send({
+                    not_a_username: 'butter_bridge',
+                    not_a_body: '#JusticeForMitch'
+                })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
+    });
 });
