@@ -418,4 +418,38 @@ describe('app', () => {
                 })
         });
     });
+    describe('DELETE /api/comments/:comment_id', () => {
+        test('status:204 - responds with deleted comment object', () => {
+            return request(app)
+                .delete('/api/comments/5')
+                .expect(204)
+            .then(() => {
+                return request(app)
+                .get('/api/articles/1/comments')
+                .then(({ body: { comments } }) => {
+                    expect(comments).toHaveLength(10);
+                })
+            }) 
+        });
+        test('status:404 - responds with "Resource does not exist"', () => {
+            return request(app)
+                .delete('/api/comments/999999')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    });
+                })
+        });
+        test('status:400 - responds with "Bad request"', () => {
+            return request(app)
+                .delete('/api/comments/not_an_id')
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
+    });
 });
