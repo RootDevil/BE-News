@@ -2,7 +2,7 @@
 
 A News API.  Serves articles, comments, topics and users.
 
-*Link to hosted version:* https://slurpy-nc-news.herokuapp.com/
+*Link to hosted version:* https://slurpy-nc-news.herokuapp.com/api
 
 ## Prerequisites
 - Node.js `(^16.13.2)`
