@@ -1,5 +1,5 @@
 const express = require('express');
-const endpoints = require('./endpoints.json');
+const { readFile } = require('fs/promises');
 const { getArticleById, patchArticleById, getArticles } = require('./controllers/articles.controller');
 const { getCommentsByArticleId, postCommentByArticleId, deleteCommentById } = require('./controllers/comments.controller');
 const { getTopics } = require('./controllers/topics.controller');
@@ -10,7 +10,8 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/api', (req, res) => {
+app.get('/api', async (req, res) => {
+    const endpoints = JSON.parse(await readFile('./endpoints.json', 'utf-8'));
     res.status(200).send({ endpoints });
 })
 
