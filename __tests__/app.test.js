@@ -431,13 +431,13 @@ describe('app', () => {
                 })
             }) 
         });
-        test('status:404 - responds with "Resource does not exist"', () => {
+        test('status:404 - responds with "Comment does not exist"', () => {
             return request(app)
                 .delete('/api/comments/999999')
                 .expect(404)
                 .then(({ body }) => {
                     expect(body).toEqual({
-                        message: "Resource does not exist"
+                        message: "Comment does not exist"
                     });
                 })
         });

@@ -26,11 +26,18 @@ exports.insertCommentByArticleId = async (articleId, newComment) => {
 }
 
 exports.removeCommentById = async (commentId) => {
-    await checkResourceExists('comments', 'comment_id', commentId);
     const comment = await db.query(`
         DELETE FROM comments
-        WHERE comment_id = $1;
+        WHERE comment_id = $1
+        RETURNING *;
     `, [commentId]);
+
+    if (comment.rows.length === 0) {
+        return Promise.reject({ 
+            status: 404, 
+            message: "Comment does not exist" 
+        });
+    }
 
     return comment.rows[0];
 }
