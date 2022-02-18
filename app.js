@@ -1,4 +1,5 @@
 const express = require('express');
+const endpoints = require('./endpoints.json');
 const { getArticleById, patchArticleById, getArticles } = require('./controllers/articles.controller');
 const { getCommentsByArticleId, postCommentByArticleId, deleteCommentById } = require('./controllers/comments.controller');
 const { getTopics } = require('./controllers/topics.controller');
@@ -8,6 +9,10 @@ const { handleCustomErrors, handlePSQLErrors, handleServerErrors } = require('./
 const app = express();
 
 app.use(express.json());
+
+app.get('/api', (req, res) => {
+    res.status(200).send({ endpoints });
+})
 
 app.get('/api/topics', getTopics);
 app.get('/api/articles', getArticles);

@@ -21,6 +21,28 @@ describe('app', () => {
                 })
         });
     });
+    describe('GET /api', () => {
+        test('status:200 - responds with JSON of all available endpoints', () => {
+            return request(app)
+                .get('/api')
+                .expect(200)
+                .then(({ body: { endpoints } }) => {
+                    expect(endpoints).toEqual(
+                        expect.objectContaining({
+                            "GET /api": expect.any(Object),
+                            "GET /api/topics": expect.any(Object),
+                            "GET /api/articles": expect.any(Object),
+                            "GET /api/articles/:article_id": expect.any(Object),
+                            "GET /api/users": expect.any(Object),
+                            "GET /api/articles/:article_id/comments": expect.any(Object),
+                            "PATCH /api/articles/:article_id": expect.any(Object),
+                            "POST /api/articles/:article_id/comments": expect.any(Object),
+                            "DELETE /api/articles/:article_id/comments": expect.any(Object),
+                        })
+                    )
+                })
+        });
+    });
     describe('GET /api/topics', () => {
         test('status:200 - responds with an array of topic objects', () => {
             return request(app)

@@ -10,18 +10,104 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all topics",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "description": "serves an array of all articles",
+    "queries": ["sort_by", "order", "topic"],
+    "exampleQuery": "/api/articles?sort_by=votes&order=asc&topic=cooking",
     "exampleResponse": {
       "articles": [
         {
           "title": "Seafood substitutions are increasing",
           "topic": "cooking",
           "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": 1527695953341
+          "created_at": 1527695953341,
+          "votes": 0,
+          "comment_count": 10
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves an object of specified article",
+    "queries": [],
+    "exampleResponse": {
+      "article": [
+        {
+          "title": "Running a Node App",
+          "topic": "coding",
+          "author": "catlover",
+          "body": "Text from the article...",
+          "created_at": 1604728980000,
+          "votes": 0,
+          "comment_count": 5
+        }
+      ]
+    }
+  },
+  "GET /api/users": {
+    "description": "serves an array of all users",
+    "queries": [],
+    "exampleResponse": {
+      "users": [
+        { "username": "catlover" }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves an array of all comments associated with specified article",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "body": "Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.",
+          "votes": -1,
+          "author": "tickle122",
+          "article_id": 18,
+          "created_at": 1590103140000
+        }
+      ]
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "updates specified article's vote count and serves updated article",
+    "queries": [],
+    "exampleRequestBody": {
+      "inc_votes": 5
+    },
+    "exampleResponse": {
+      "comments": [
+        {
+          "body": "Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.",
+          "votes": 5,
+          "author": "tickle122",
+          "article_id": 18,
+          "created_at": 1590103140000
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "posts comment and serves object of posted comment",
+    "queries": [],
+    "exampleRequestBody": {
+          "body": "Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.",
+          "username": "tickle122"
+    },
+    "exampleResponse": {
+      "comment": [
+        {
+          "body": "Itaque quisquam est similique et est perspiciatis reprehenderit voluptatem autem. Voluptatem accusantium eius error adipisci quibusdam doloribus.",
+          "votes": -1,
+          "author": "tickle122",
+          "article_id": 18,
+          "created_at": 1590103140000
+        }
+      ]
+    }
+  },
+  "DELETE /api/articles/:article_id/comments": {
+    "description": "deletes specified comment",
+    "queries": [],
+    "exampleResponse": {}
   }
+
 }
