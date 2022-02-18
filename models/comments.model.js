@@ -29,8 +29,7 @@ exports.removeCommentById = async (commentId) => {
     await checkResourceExists('comments', 'comment_id', commentId);
     const comment = await db.query(`
         DELETE FROM comments
-        WHERE comment_id = $1
-        RETURNING *;
+        WHERE comment_id = $1;
     `, [commentId]);
 
     return comment.rows[0];

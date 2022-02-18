@@ -357,20 +357,17 @@ describe('app', () => {
         });
     });
     describe('DELETE /api/comments/:comment_id', () => {
-        test('status:201 - responds with deleted comment object', () => {
+        test('status:204 - responds with deleted comment object', () => {
             return request(app)
                 .delete('/api/comments/5')
-                .expect(201)
-                .then(({ body: { comment } }) => {
-                    expect(comment).toEqual({
-                        comment_id: 5,
-                        body: "I hate streaming noses",
-                        votes: 0,
-                        author: "icellusedkars",
-                        article_id: 1,
-                        created_at: expect.any(String)
-                    });
+                .expect(204)
+            .then(() => {
+                return request(app)
+                .get('/api/articles/1/comments')
+                .then(({ body: { comments } }) => {
+                    expect(comments).toHaveLength(10);
                 })
+            }) 
         });
         test('status:404 - responds with "Resource does not exist"', () => {
             return request(app)

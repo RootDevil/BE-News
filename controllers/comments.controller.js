@@ -24,8 +24,8 @@ exports.postCommentByArticleId = async (req, res, next) => {
 exports.deleteCommentById = async (req, res, next) => {
     try {
         const { params: { comment_id } } = req;
-        const comment = await removeCommentById(comment_id);
-        res.status(201).send({ comment });
+        await removeCommentById(comment_id);
+        res.status(204).send();
     }
     catch(err) {
         next(err);
