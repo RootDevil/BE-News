@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { readFile } = require('fs/promises');
 const { getArticleById, patchArticleById, getArticles } = require('./controllers/articles.controller');
 const { getCommentsByArticleId, postCommentByArticleId, deleteCommentById } = require('./controllers/comments.controller');
@@ -8,6 +9,7 @@ const { handleCustomErrors, handlePSQLErrors, handleServerErrors } = require('./
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/api', async (req, res) => {
