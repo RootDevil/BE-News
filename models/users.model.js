@@ -1,4 +1,5 @@
 const db = require('../db/connection');
+const { checkResourceExists } = require('../utils/utils');
 
 exports.selectUsers = async () => {
     const users = await db.query(`
@@ -6,4 +7,14 @@ exports.selectUsers = async () => {
     `)
 
     return users.rows;
+}
+
+exports.selectUserByUsername = async (username) => {
+    await checkResourceExists('users', 'username', username);
+    const user = await db.query(`
+        SELECT * FROM users
+        WHERE username = $1;
+    `, [username]);
+
+    return user.rows[0];
 }

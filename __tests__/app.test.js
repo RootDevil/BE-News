@@ -203,6 +203,32 @@ describe('app', () => {
                 })
         });
     });
+    describe('GET /api/users/:username', () => {
+        test('status:200 - responds with user object', () => {
+            return request(app)
+                .get('/api/users/icellusedkars')
+                .expect(200)
+                .then(({ body: { user } }) => {
+                    expect(user).toEqual(
+                        expect.objectContaining({
+                            username: 'icellusedkars',
+                            name: 'sam',
+                            avatar_url: 'https://avatars2.githubusercontent.com/u/24604688?s=460&v=4'
+                          })
+                    )
+                })
+        });
+        test('status:404 = responds with "Resource does not exist"', () => {
+            return request(app)
+                .get('/api/users/i_dont_exist')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    })
+                })
+        });
+    });
     describe('GET /api/articles', () => {
         test('status:200 - responds with an array of article objects', () => {
             return request(app)
