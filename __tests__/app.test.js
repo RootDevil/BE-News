@@ -500,4 +500,60 @@ describe('app', () => {
                 })
         });
     });
+    describe('PATCH /api/comments/:comment_id', () => {
+        test('status:200 - responds with comment object with incremented votes when given positive value', () => {
+            return request(app)
+                .patch('/api/comments/3')
+                .send({ inc_votes: 1 })
+                .expect(200)
+                .then(({ body: { comment } }) => {
+                    expect(comment).toEqual({
+                        comment_id: 3,
+                        body: "Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.",
+                        votes: 101,
+                        author: "icellusedkars",
+                        article_id: 1,
+                        created_at: expect.any(String),
+                      })
+                })
+        });
+        test('status:200 - responds with comment object with decremented votes when given negative value', () => {
+            return request(app)
+                .patch('/api/comments/3')
+                .send({ inc_votes: -5 })
+                .expect(200)
+                .then(({ body: { comment } }) => {
+                    expect(comment).toEqual({
+                        comment_id: 3,
+                        body: "Replacing the quiet elegance of the dark suit and tie with the casual indifference of these muted earth tones is a form of fashion suicide, but, uh, call me crazy — onyou it works.",
+                        votes: 95,
+                        author: "icellusedkars",
+                        article_id: 1,
+                        created_at: expect.any(String),
+                      })
+                })
+        });
+        test('status:400 - responds with "Bad request" when given wrong value type', () => {
+            return request(app)
+                .patch('/api/comments/3')
+                .send({ inc_votes: 'hello world' })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
+        test('status:400 - responds with "Bad request" when given invalid property', () => {
+            return request(app)
+                .patch('/api/comments/3')
+                .send({ not_a_property: 5 })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
+    });
 });

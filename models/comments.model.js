@@ -41,3 +41,14 @@ exports.removeCommentById = async (commentId) => {
 
     return comment.rows[0];
 }
+
+exports.updateCommentById = async (commentId, incVotes) => {
+    const comment = await db.query(`
+        UPDATE comments
+        SET votes = votes + $1
+        WHERE comment_id = $2
+        RETURNING *;
+    `, [incVotes, commentId]);
+
+    return comment.rows[0];
+}
