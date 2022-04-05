@@ -1,16 +1,12 @@
 const express = require('express');
 const cors = require('cors');
-const { deleteCommentById } = require('./controllers/comments.controller');
-const { getUsers } = require('./controllers/users.controller');
-const { handleCustomErrors, handlePSQLErrors, handleServerErrors } = require('./errors');
 const apiRouter = require('./routes/api.router');
+const { handleCustomErrors, handlePSQLErrors, handleServerErrors } = require('./errors');
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-app.delete('/api/comments/:comment_id', deleteCommentById);
 
 app.use('/api', apiRouter);
 
