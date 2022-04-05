@@ -218,6 +218,16 @@ describe('app', () => {
                     )
                 })
         });
+        test('status: 404 = responds with "Resource does not exist"', () => {
+            return request(app)
+                .get('/api/users/i_dont_exist')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    })
+                })
+        });
     });
     describe('GET /api/articles', () => {
         test('status:200 - responds with an array of article objects', () => {
