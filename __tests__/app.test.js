@@ -204,7 +204,7 @@ describe('app', () => {
         });
     });
     describe('GET /api/users/:username', () => {
-        test('status: 200 - responds with user object', () => {
+        test('status:200 - responds with user object', () => {
             return request(app)
                 .get('/api/users/icellusedkars')
                 .expect(200)
@@ -218,7 +218,7 @@ describe('app', () => {
                     )
                 })
         });
-        test('status: 404 = responds with "Resource does not exist"', () => {
+        test('status:404 = responds with "Resource does not exist"', () => {
             return request(app)
                 .get('/api/users/i_dont_exist')
                 .expect(404)
