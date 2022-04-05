@@ -10,8 +10,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get('/api/users', getUsers);
-
 app.delete('/api/comments/:comment_id', deleteCommentById);
 
 app.use('/api', apiRouter);
