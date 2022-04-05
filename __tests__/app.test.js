@@ -533,5 +533,27 @@ describe('app', () => {
                       })
                 })
         });
+        test('status:400 - responds with "Bad request" when given wrong value type', () => {
+            return request(app)
+                .patch('/api/comments/3')
+                .send({ inc_votes: 'hello world' })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
+        test('status:400 - responds with "Bad request" when given invalid property', () => {
+            return request(app)
+                .patch('/api/comments/3')
+                .send({ not_a_property: 5 })
+                .expect(400)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Bad request"
+                    });
+                })
+        });
     });
 });
