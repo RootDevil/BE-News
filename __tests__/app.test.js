@@ -582,5 +582,37 @@ describe('app', () => {
                     );
                 })
         });
+        test('status:404 - responds with "Resource does not exist" when given author which doesn\'t exist in users table', () => {
+            return request(app)
+                .post('/api/articles')
+                .send({
+                    author: "slurpy",
+                    title: "Oldest question finally answered - cats or dogs?",
+                    body: "Cats, of course.",
+                    topic: "cats"
+                })
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    });
+                })
+        });
+        test('status:404 - responds with "Resource does not exist" when given topic which doesn\'t exist in topics table', () => {
+            return request(app)
+                .post('/api/articles')
+                .send({
+                    author: "lurker",
+                    title: "Oldest question finally answered - cats or dogs?",
+                    body: "Cats, of course.",
+                    topic: "football"
+                })
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body).toEqual({
+                        message: "Resource does not exist"
+                    });
+                })
+        });
     });
 });
