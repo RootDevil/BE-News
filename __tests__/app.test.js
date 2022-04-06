@@ -557,7 +557,7 @@ describe('app', () => {
         });
     });
     describe('POST /api/articles', () => {
-        test.only('status:200 - responds with posted article object', () => {
+        test('status:200 - responds with posted article object', () => {
             return request(app)
                 .post('/api/articles')
                 .send({
