@@ -54,3 +54,24 @@ exports.selectArticles = async (query) => {
 
     return articles.rows;
 }
+
+exports.addArticle = async (newArticle) => {
+    const { author, title, body, topic } = newArticle;
+    const { rows: [ { article_id: articleId } ] } = await db.query(`
+        INSERT INTO articles
+            (author, title, body, topic)
+        VALUES
+            ($1, $2, $3, $4)
+        RETURNING article_id;
+    `, [author, title, body, topic]);
+    const article = await db.query(`
+        SELECT articles.article_id, articles.author, title, articles.body, topic, articles.votes, articles.created_at, CAST(COUNT(comments.article_id) AS INT) AS comment_count
+        FROM articles
+        LEFT JOIN comments ON articles.article_id = comments.article_id
+        WHERE articles.article_id = $1
+        GROUP BY articles.article_id;
+    `, [articleId]);
+
+    return article.rows[0];
+}
+

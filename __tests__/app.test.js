@@ -556,4 +556,31 @@ describe('app', () => {
                 })
         });
     });
+    describe('POST /api/articles', () => {
+        test.only('status:200 - responds with posted article object', () => {
+            return request(app)
+                .post('/api/articles')
+                .send({
+                    author: "lurker",
+                    title: "Oldest question finally answered - cats or dogs?",
+                    body: "Cats, of course.",
+                    topic: "cats"
+                })
+                .expect(200)
+                .then(({ body: { article } }) => {
+                    expect(article).toEqual(
+                        expect.objectContaining({
+                            article_id: 13,
+                            author: "lurker",
+                            title: "Oldest question finally answered - cats or dogs?",
+                            body: "Cats, of course.",
+                            topic: "cats",
+                            votes: 0,
+                            created_at: expect.any(String),
+                            comment_count: 0
+                        })
+                    );
+                })
+        });
+    });
 });
