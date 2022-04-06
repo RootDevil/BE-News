@@ -54,3 +54,17 @@ exports.selectArticles = async (query) => {
 
     return articles.rows;
 }
+
+exports.addArticle = async (newArticle) => {
+    const { author, title, body, topic } = newArticle;
+    const { rows: [ { article_id: articleId } ] } = await db.query(`
+        INSERT INTO articles
+            (author, title, body, topic)
+        VALUES
+            ($1, $2, $3, $4)
+        RETURNING article_id;
+    `, [author, title, body, topic]);
+    
+    return this.selectArticleById(articleId);
+}
+
