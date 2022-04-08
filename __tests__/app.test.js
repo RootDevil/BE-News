@@ -3,7 +3,6 @@ const request = require('supertest');
 const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data');
 const db = require('../db/connection');
-const { convertTimestampToDate } = require('../db/helpers/utils');
 
 beforeEach(() => seed(data));
 afterAll(() => db.end());
