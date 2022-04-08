@@ -4,6 +4,8 @@ A News API.  Serves articles, comments, topics and users.
 
 *Link to hosted version:* https://slurpy-nc-news.herokuapp.com/api
 
+I have created a front-end news application that uses this API:
+*GitHub:* https://github.com/RootDevil/FE-News
 *Link to hosted front-end application:* https://slurpy-nc-news.netlify.app/
 
 ## Prerequisites
